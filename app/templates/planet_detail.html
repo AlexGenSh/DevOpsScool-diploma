@@ -1,0 +1,87 @@
+{% extends 'base_cover.html' %}
+
+{% block style %}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px;
+    padding: 8px;
+}
+{% endblock %}
+
+{% block script %}
+let sortDirection = false;
+let planetData = {{ planet_detail_read_db|safe }};
+let peopleData = {{ people_detail|safe }};
+
+window.onload = function() {
+    loadTableData(planetData);
+    loadTableDatap(peopleData);
+};
+
+
+function loadTableData(planetData) {
+    let tableBody = document.getElementById('planetData');
+    let dataHtml = '';
+
+    for(let planet of planetData) {
+        dataHtml += `<tr><td>${planet[0]}</td><td>${planet[1]}</td><td>${planet[2]}</td><td>${planet[3]}</td><td>${planet[4]}</td><td>${planet[5]}</td><td>${planet[6]}</td><td>${planet[7]}</td><td>${planet[8]}</td></tr>`;
+    }
+    tableBody.innerHTML = dataHtml;
+}
+function loadTableDatap(peopleData) {
+    let tableBody = document.getElementById('peopleData');
+    let dataHtml = '';
+
+    for(let people of peopleData) {
+        dataHtml += `<tr><td>${people[0]}</td><td>${people[1]}</td><td>${people[2]}</td><td>${people[3]}</td><td>${people[4]}</td><td>${people[5]}</td><td>${people[6]}</td><td>${people[7]}</td></tr>`;
+    }
+    tableBody.innerHTML = dataHtml;
+}
+
+{% endblock %}
+
+
+{% block table %}
+Planet
+    <table>
+        <thead>
+            <tr>
+                <th id="name"> Name </th>
+                <th id="rotation_period">Rotation_period</th>
+                <th id="orbital_period">Orbital_period</th>
+                <th id="diameter">Diameter</th>
+                <th id="climate">Climate</th>
+                <th id="gravity">Gravity</th>
+                <th id="terrain">Terrain</th>
+                <th id="surface_water">Surface_water</th>
+                <th id="population">Population</th>
+            </tr>
+        </thead>
+        <tbody id="planetData"></tbody>
+    </table>
+{% endblock %}
+
+
+{% block people %}
+Residents
+    <table>
+        <thead>
+            <tr>
+                <th id="name">Name</th>
+                <th id="height">Height</th>
+                <th id="mass">Mass</th>
+                <th id="hair_color">Hair_color</th>
+                <th id="skin_color">Skin_color</th>
+                <th id="eye_color">Eye_color</th>
+                <th id="birth_year">Birth_year</th>
+                <th id="gender">Gender</th>
+            </tr>
+        </thead>
+        <tbody id="peopleData"></tbody>
+    </table>
+{% endblock %}
