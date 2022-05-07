@@ -1,3 +1,4 @@
+from flask_wtf.csrf import CSRFProtect
 from flask import Flask, render_template, redirect, request
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
@@ -7,6 +8,8 @@ from json import loads
 
 
 app = Flask(__name__)
+csrf = CSRFProtect()
+csrf.init_app(app)
 
 
 def func_parse_json(json_data):
@@ -96,8 +99,8 @@ def func_populate_or_update_db(var_planet):
         try:
             response = urlopen(url_planet)
             json_data = loads(response.read())
-        except:
-            print(json_data, var_planet)
+        except Exception:
+            print(json_data, error)
             var_planet = var_planet + 1
             continue
         # Call function "func_insert_db" to insert into DB parsed data that was obtained via API
@@ -113,7 +116,7 @@ def func_update_peoples_db(var_people):
         try:
             response = urlopen(url_people)
             json_people = loads(response.read())
-        except:
+        except Exception:
             var_people = var_people + 1
             continue
         # Call function "func_insert_db" to insert into DB parsed data that was obtained via API

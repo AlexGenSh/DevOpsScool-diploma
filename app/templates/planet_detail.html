@@ -47,8 +47,8 @@ function loadTableDatap(peopleData) {
 
 
 {% block table %}
-Planet
-    <table>
+<p id="mydesc">Selected planet description</p>
+    <table aria-describedby="mydesc">
         <thead>
             <tr>
                 <th id="name"> Name </th>
@@ -68,8 +68,8 @@ Planet
 
 
 {% block people %}
-Residents
-    <table>
+<p id="mydesc">Residents of Selected planet</p>
+    <table aria-describedby="mydesc">
         <thead>
             <tr>
                 <th id="name">Name</th>
