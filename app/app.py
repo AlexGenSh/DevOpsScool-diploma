@@ -1,3 +1,5 @@
+import os
+
 from flask_wtf.csrf import CSRFProtect
 from flask import Flask, render_template, redirect, request
 from sqlalchemy import create_engine, Column, String, Integer
@@ -128,7 +130,8 @@ def func_update_peoples_db(var_people):
 url_api = 'https://swapi.dev/api/'
 
 # Подключение к серверу MySQL по ip 192.168.56.115 с использованием mysql-python DBAPI.
-engine = create_engine('mysql+mysqldb://root:vagrant@192.168.56.115/mydb')
+#engine = create_engine('mysql+mysqldb://root:vagrant@192.168.56.115/mydb')
+engine = create_engine('mysql+mysqldb://' + os.environ.get('DB_ADMIN_USERNAME') + ':'+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES'))
 # engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
 # Connecting to the database "mydb"; the database itself should already exist, the app will not
 # create database itself. But the app will create tables in the database if they do not exist.
