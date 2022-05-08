@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Get current date
-          id: date
+          id: daterelise
           run: echo "::set-output name=date::$(date +'%d-%b-%H-%M-%S')"
 
       - name: Login to Docker Hub
@@ -45,7 +45,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/devops_school:${{ steps.date.outputs.date }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/devops_school:${{ steps.date.outputs.daterelise }}
           build-args: |
             VAR1=${{ secrets.DB_ADMIN_USERNAME }}
             VAR2=${{ secrets.DB_ADMIN_PASSWORD }}
