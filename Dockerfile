@@ -1,6 +1,6 @@
 FROM python:3.10.4-buster
 EXPOSE 5000/tcp
-WORKDIR /app
+WORKDIR /app/
 COPY requirements.txt requirements.txt
 # RUN apt update
 # RUN apt install python-dev
@@ -10,7 +10,7 @@ COPY requirements.txt requirements.txt
 # RUN apt-get install python3-dev default-libmysqlclient-dev build-essentia
 # RUN pip3 install wheel
 RUN pip3 install -r requirements.txt
-COPY . .
+COPY ./app /app/
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
 
 # Environmental variables are inserted to the container via k8s and are not provided neither in Dockerfile nor in GitHub Actions
