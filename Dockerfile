@@ -1,14 +1,16 @@
-FROM python:3.10.4-slim-buster
+FROM python:3.10.4-buster
 EXPOSE 5000/tcp
-WORKDIR /app/
-COPY ./app /app/
-COPY ./app/static /app/static/
-COPY ./app/templates /app/templates/
-COPY ./requirements.txt /app/
-COPY ./requirements.txt /app/requirements.txt
-RUN apt-get install default-libmysqlclient-dev
+WORKDIR /app
+COPY requirements.txt requirements.txt
+# RUN apt update
+# RUN apt install python-dev
+# RUN apt install python-MySQLdb
+# RUN pip3 install MySQL-Python
+# RUN apt-get install python3-dev libmysqlclient-dev
+# RUN apt-get install python3-dev default-libmysqlclient-dev build-essentia
+# RUN pip3 install wheel
 RUN pip3 install -r requirements.txt
-WORKDIR /app/
+COPY . .
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
 
 # Environmental variables are inserted to the container via k8s and are not provided neither in Dockerfile nor in GitHub Actions
