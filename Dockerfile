@@ -1,10 +1,14 @@
 FROM python:3.10.4-slim-buster
 EXPOSE 5000/tcp
-WORKDIR /app
-COPY requirements.txt requirements.txt
+WORKDIR /app/
+COPY ./app /app/
+COPY ./app/static /app/static/
+COPY ./app/templates /app/templates/
+COPY ./requirements.txt /app/
+COPY ./requirements.txt /app/requirements.txt
 RUN apt install default-libmysqlclient-dev
 RUN pip3 install -r requirements.txt
-COPY . .
+WORKDIR /app/
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
 
 # Environmental variables are inserted to the container via k8s and are not provided neither in Dockerfile nor in GitHub Actions
