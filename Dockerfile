@@ -6,7 +6,7 @@ COPY ./app/static /app/static/
 COPY ./app/templates /app/templates/
 COPY ./requirements.txt /app/
 COPY ./requirements.txt /app/requirements.txt
-RUN apt install default-libmysqlclient-dev
+RUN apt-get install default-libmysqlclient-dev
 RUN pip3 install -r requirements.txt
 WORKDIR /app/
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
