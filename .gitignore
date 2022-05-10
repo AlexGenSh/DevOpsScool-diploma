@@ -1,4 +1,4 @@
 IAC/.terraform
 *.tfstate
 *.tfstate.backup
-*.tfvars
+IAC/diploma.tfvars
