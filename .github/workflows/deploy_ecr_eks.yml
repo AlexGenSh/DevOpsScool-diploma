@@ -70,12 +70,10 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ env.RELEASE_IMAGE }}
-#          tags: test-repo:${{ steps.date.outputs.date }}
-#          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/devops_school:${{ steps.date.outputs.date }}
           build-args: |
             VAR1=${{ secrets.DB_ADMIN_USERNAME }}
             VAR2=${{ secrets.DB_ADMIN_PASSWORD }}
-#            VAR3=${{ secrets.DB_URL }}
+            VAR3=${{ secrets.DB_URL }}
 
       - name: Compose YAML for initial Kubernetes deployment
         env:
