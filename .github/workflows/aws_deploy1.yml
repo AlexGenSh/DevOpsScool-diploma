@@ -14,8 +14,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  KUBE_NAMESPACE: prod
-  ECR_REPOSITORY: container_repo1
+  KUBE_NAMESPACE: test
+  ECR_REPOSITORY: test-repo
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
