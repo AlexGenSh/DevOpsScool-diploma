@@ -70,7 +70,7 @@ jobs:
           file: ./Dockerfile
           push: true
 #          tags: ${{ env.RELEASE_IMAGE }}
-          tags: ${{ steps.login-ecr.outputs.registry }}/test-repo:${{ steps.date.outputs.date }}
+          tags: ${{ env.AWS_ACCESS_KEY_ID }}/test-repo:${{ steps.date.outputs.date }}
 	      build-args: |
             VAR1=${{ secrets.DB_ADMIN_USERNAME }}
             VAR2=${{ secrets.DB_ADMIN_PASSWORD }}
