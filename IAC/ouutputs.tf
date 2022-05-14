@@ -18,6 +18,7 @@ output "db_instance_address" {
   value = aws_db_instance.database1.address
 }
 
+
 output "cluster_name" {
   description = "Kubernetes Cluster Name"
   value       = var.cluster_name
