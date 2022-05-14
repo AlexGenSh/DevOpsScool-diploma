@@ -1,5 +1,5 @@
 FROM python:3.10.4-buster
-EXPOSE 5000/tcp
+EXPOSE 8080/tcp
 WORKDIR /app/
 COPY requirements.txt requirements.txt
 # RUN apt update
