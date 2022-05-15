@@ -83,8 +83,9 @@ jobs:
 
       - name: Check deployment status
         id: deploy_status
-        uses: Consensys/kubernetes-action@master
-        with:                                                                                                         
+#        uses: Consensys/kubernetes-action@master
+        uses: kodermax/kubectl-aws-eks@master
+        with:
           args: get deploy -A
     
       - name: Print deployment status and ENV
