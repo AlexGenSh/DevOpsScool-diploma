@@ -15,7 +15,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  KUBE_NAMESPACE: test
+  KUBE_NAMESPACE: flasktest
   ECR_REPOSITORY: test-repo
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -75,11 +75,15 @@ jobs:
             VAR2=${{ secrets.DB_ADMIN_PASSWORD }}
             VAR3=${{ secrets.DB_URL }}
 
+      - name: Compose YAML for create namespace
+        run: |
+          printf "apiVersion: apps/v1\nkind: Namespace\n metadata:\n name: ${{ env.KUBE_NAMESPACE }}" > k8ns.yaml
+
       - name: Compose YAML for initial Kubernetes deployment
         env:
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
         run: |
-          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskprod\n  namespace: ${{ env.KUBE_NAMESPACE }}\n  labels:\n    app: flaskprod\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskprod\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskprod\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DB_URL}}" > k8s.yaml
+          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskprod\n  namespace: ${{ env.KUBE_NAMESPACE }}\n  labels:\n    app: flaskapptest\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskapptest\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskapptest\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DB_URL}}" > k8s.yaml
 
       - name: Check deployment status
         id: deploy_status
@@ -93,9 +97,15 @@ jobs:
           DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
         run: |
           echo  ${{ steps.deploy_status.outputs.result }}
+
+      - name: Create test namecpaces
+        if: contains( env.DEPLOY_STATUS, 'flasktest') != 'true'
+        uses: kodermax/kubectl-aws-eks@master
+        with:
+          args: apply -f k8ns.yaml
       
       - name: Create new Kubernetes deployment
-        if: contains( env.DEPLOY_STATUS, 'flaskprod') != 'true'
+        if: contains( env.DEPLOY_STATUS, 'flaskapptest') != 'true'
         uses: kodermax/kubectl-aws-eks@master                                                                         
         env:                                                                                                          
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
@@ -103,7 +113,7 @@ jobs:
           args: apply -f k8s.yaml
 
       - name: Update Kubernetes deployment
-        if: contains( env.DEPLOY_STATUS, 'flaskprod') == 'true'
+        if: contains( env.DEPLOY_STATUS, 'flaskapptest') == 'true'
         uses: kodermax/kubectl-aws-eks@master                                                                         
         env:                                                                                                          
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
