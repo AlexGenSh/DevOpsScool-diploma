@@ -83,7 +83,7 @@ jobs:
         env:
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
         run: |
-          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskprod\n  namespace: ${{ env.KUBE_NAMESPACE }}\n  labels:\n    app: flaskapptest\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskapptest\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskapptest\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DB_URL}}" > k8s.yaml
+          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskapptest\n  namespace: ${{ env.KUBE_NAMESPACE }}\n  labels:\n    app: flaskapptest\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskapptest\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskapptest\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DB_URL}}" > k8s.yaml
 
       - name: Check deployment status
         id: deploy_status
@@ -118,4 +118,4 @@ jobs:
         env:                                                                                                          
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
         with:                                                                                                         
-          args: set image deployment/flaskprod flaskcontainer=${{ env.RELEASE_IMAGE }} -n ${{ env.KUBE_NAMESPACE }}
+          args: set image deployment/flaskapptest flaskcontainer=${{ env.RELEASE_IMAGE }} -n ${{ env.KUBE_NAMESPACE }}

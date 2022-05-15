@@ -5,8 +5,8 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: nginx
+    app: flaskapptest
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
+      targetPort: 8080
