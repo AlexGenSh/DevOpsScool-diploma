@@ -77,7 +77,7 @@ jobs:
 
       - name: Compose YAML for create namespace
         run: |
-          printf "apiVersion: apps/v1\nkind: Namespace\n metadata:\n name: ${{ env.KUBE_NAMESPACE }}" > k8ns.yaml
+          printf "apiVersion: v1\nkind: Namespace\nmetadata:\n name: ${{ env.KUBE_NAMESPACE }}" > k8ns.yaml
 
       - name: Compose YAML for initial Kubernetes deployment
         env:
