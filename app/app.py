@@ -132,7 +132,9 @@ url_api = 'https://swapi.dev/api/'
 # Подключение к серверу MySQL по ip 192.168.56.115 с использованием mysql-python DBAPI.
 #engine = create_engine('mysql+mysqldb://root:vagrant@192.168.56.115/mydb')
 #engine = create_engine('mysql+mysqldb://' + os.environ.get('DB_ADMIN_USERNAME') + ':'+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL'))
-engine = create_engine('mysql+mysqldb://' + os.environ.get('VAR1') + ':'+os.environ.get('VAR2')+"@"+os.environ.get('VAR3'))
+
+engine = create_engine('mysql+mysqldb://' + str(os.environ.get('VAR1')) + ':' + str(os.environ.get('VAR2')) + '@' + str(os.environ.get('VAR3')))
+
 # engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
 # Connecting to the database "mydb"; the database itself should already exist, the app will not
 # create database itself. But the app will create tables in the database if they do not exist.
