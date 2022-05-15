@@ -102,7 +102,7 @@ def func_populate_or_update_db(var_planet):
             response = urlopen(url_planet)
             json_data = loads(response.read())
         except Exception:
-            print(json_data, error)
+            print(json_data)
             var_planet = var_planet + 1
             continue
         # Call function "func_insert_db" to insert into DB parsed data that was obtained via API
@@ -133,7 +133,9 @@ url_api = 'https://swapi.dev/api/'
 #engine = create_engine('mysql+mysqldb://root:vagrant@192.168.56.115/mydb')
 #engine = create_engine('mysql+mysqldb://' + os.environ.get('DB_ADMIN_USERNAME') + ':'+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL'))
 
-engine = create_engine('mysql+mysqldb://' + str(os.environ.get('VAR1')) + ':' + str(os.environ.get('VAR2')) + '@' + str(os.environ.get('VAR3')))
+#engine = create_engine('mysql+mysqldb://' + str(os.environ.get('VAR1')) + ':' + str(os.environ.get('VAR2')) + '@' + str(os.environ.get('VAR3')))
+url_engine = 'mysql+mysqldb://' + str(os.environ.get('VAR1')) + ':' + str(os.environ.get('VAR2')) + '@'+ str(os.environ.get('VAR3'))
+engine = create_engine(url_engine)
 
 # engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
 # Connecting to the database "mydb"; the database itself should already exist, the app will not
