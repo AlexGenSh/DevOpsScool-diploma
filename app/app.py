@@ -134,7 +134,7 @@ url_api = 'https://swapi.dev/api/'
 #engine = create_engine('mysql+mysqldb://' + os.environ.get('DB_ADMIN_USERNAME') + ':'+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL'))
 
 #engine = create_engine('mysql+mysqldb://' + str(os.environ.get('VAR1')) + ':' + str(os.environ.get('VAR2')) + '@' + str(os.environ.get('VAR3')))
-url_engine = "mysql+mysqldb://" + str(os.environ.get('VAR1')) + ":" + str(os.environ.get('VAR2')) + "@" + str(os.environ.get('VAR3'))
+url_engine = "mysql+mysqldb://" + str(os.environ.get('DB_ADMIN_USERNAME')) + ":" + str(os.environ.get('DB_ADMIN_PASSWORD')) + "@" + str(os.environ.get('DB_URL'))
 engine = create_engine(url_engine)
 
 # engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
