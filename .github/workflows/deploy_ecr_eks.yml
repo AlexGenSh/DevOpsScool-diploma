@@ -70,11 +70,11 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ env.RELEASE_IMAGE }}
-          build-args: |
-            VAR1=${{ secrets.DB_ADMIN_USERNAME }}
-            VAR2=${{ secrets.DB_ADMIN_PASSWORD }}
-            VAR3=${{ secrets.DB_URL }}
-#          build-args: VAR1=${{ secrets.DB_ADMIN_USERNAME }},VAR2=${{ secrets.DB_ADMIN_PASSWORD }},VAR3=${{ secrets.DB_URL }}
+#         build-args: |
+          secrets:  |
+            "VAR1=${{ secrets.DB_ADMIN_USERNAME }}"
+            "VAR2=${{ secrets.DB_ADMIN_PASSWORD }}"
+            "VAR3=${{ secrets.DB_URL }}"
 
       - name: Compose YAML for create namespace
         run: |
