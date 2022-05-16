@@ -76,6 +76,11 @@ jobs:
             VAR3=${{ secrets.DB_URL }}
 #          build-args: VAR1=${{ secrets.DB_ADMIN_USERNAME }},VAR2=${{ secrets.DB_ADMIN_PASSWORD }},VAR3=${{ secrets.DB_URL }}
 
+      - name: Print ENV variables
+        run: |
+          echo  ${{ VAR1 }} ${{ VAR2 }} ${{ VAR3 }}
+
+
       - name: Compose YAML for create namespace
         run: |
           printf "apiVersion: v1\nkind: Namespace\nmetadata:\n name: ${{ env.KUBE_NAMESPACE }}" > k8ns.yaml
