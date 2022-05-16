@@ -78,7 +78,7 @@ jobs:
 
       - name: Print ENV variables
         run: |
-          echo  ${{ VAR1 }} ${{ VAR2 }} ${{ VAR3 }}
+          echo  ${{ secrets.DB_ADMIN_USERNAME }} ${{ secrets.DB_ADMIN_PASSWORD }} ${{ secrets.DB_URL }}
 
 
       - name: Compose YAML for create namespace
