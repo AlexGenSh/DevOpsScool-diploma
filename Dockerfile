@@ -2,19 +2,12 @@ FROM python:3.10.4-buster
 ARG VAR1
 ARG VAR2
 ARG VAR3
-ENV DB_ADMIN_USERNAME=$VAR1
-ENV DB_ADMIN_PASSWORD=$VAR2
-ENV DB_URL=$VAR3
+ENV DB_ADMIN_USERNAME $VAR1
+ENV DB_ADMIN_PASSWORD $VAR2
+ENV DB_URL $VAR3
 EXPOSE 8080/tcp
 WORKDIR /app/
 COPY requirements.txt requirements.txt
-# RUN apt update
-# RUN apt install python-dev
-# RUN apt install python-MySQLdb
-# RUN pip3 install MySQL-Python
-# RUN apt-get install python3-dev libmysqlclient-dev
-# RUN apt-get install python3-dev default-libmysqlclient-dev build-essentia
-# RUN pip3 install wheel
 RUN pip3 install -r requirements.txt
 COPY ./app /app/
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
