@@ -8,9 +8,9 @@ ENV DB_URL=$VAR3
 EXPOSE 8080/tcp
 WORKDIR /app/
 COPY requirements.txt requirements.txt
-RUN DB_ADMIN_USERNAME=$VAR1
-RUN DB_ADMIN_PASSWORD=$VAR2
-RUN DB_URL=$VAR3
+RUN DB_ADMIN_USERNAME=$DB_ADMIN_USERNAME
+RUN DB_ADMIN_PASSWORD=$DB_ADMIN_PASSWORD
+RUN DB_URL=$DB_URL
 RUN pip3 install -r requirements.txt
 COPY ./app /app/
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
