@@ -351,8 +351,8 @@ resource "aws_eks_node_group" "diploma-eks-node-group" {
   instance_types = ["t3.medium"]
 
   scaling_config {
-    desired_size = 3
-    max_size     = 5
+    desired_size = 2
+    max_size     = 3
     min_size     = 2
   }
 

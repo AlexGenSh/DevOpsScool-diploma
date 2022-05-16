@@ -129,7 +129,6 @@ def func_update_peoples_db(var_people):
 
 url_api = 'https://swapi.dev/api/'
 
-# Подключение к серверу MySQL по ip 192.168.56.115 с использованием mysql-python DBAPI.
 #engine = create_engine('mysql+mysqldb://root:vagrant@192.168.56.115/mydb')
 #engine = create_engine('mysql+mysqldb://' + os.environ.get('DB_ADMIN_USERNAME') + ':'+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL'))
 
