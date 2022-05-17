@@ -5,7 +5,7 @@ ARG VAR3
 ENV DB_ADMIN_USERNAME=$VAR1
 ENV DB_ADMIN_PASSWORD=$VAR2
 ENV DB_URL=$VAR3
-EXPOSE 8080/tcp
+EXPOSE 5000/tcp
 WORKDIR /app/
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
