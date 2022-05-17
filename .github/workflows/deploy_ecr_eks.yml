@@ -74,7 +74,7 @@ jobs:
           tags: ${{ env.RELEASE_IMAGE }}
           build-args: |
 #            VAR1="${{ secrets.DB_ADMIN_USERNAME }}"
-            ${{ env.VAR1 }}
+#            ${{ env.VAR1 }}
 #            VAR2="${{ secrets.DB_ADMIN_PASSWORD }}"
             VAR2=${{ env.VAR2 }}
             VAR3=${{ secrets.DB_URL }}
