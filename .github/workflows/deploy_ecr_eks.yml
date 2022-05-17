@@ -17,6 +17,7 @@ env:
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   KUBE_NAMESPACE: flasktest
   ECR_REPOSITORY: test-repo
+  DB_ADMIN_USERNAME: ${{ secrets.DB_ADMIN_USERNAME }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -71,7 +72,7 @@ jobs:
           push: true
           tags: ${{ env.RELEASE_IMAGE }}
           build-args: |
-            VAR1=${{ secrets.DB_ADMIN_USERNAME }}
+            VAR1=${{ env.DB_ADMIN_USERNAME }}
             VAR2=${{ secrets.DB_ADMIN_PASSWORD }}
             VAR3=${{ secrets.DB_URL }}
             VAR4=test
