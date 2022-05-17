@@ -1,8 +1,8 @@
 FROM python:3.10.4-buster
-ARG VAR1
-ARG VAR2
-ARG VAR3
-ARG VAR4
+#ARG VAR1
+#ARG VAR2
+#ARG VAR3
+#ARG VAR4
 ENV DB_ADMIN_USERNAME=$VAR1
 ENV DB_ADMIN_PASSWORD=$VAR2
 ENV DB_URL=$VAR3
@@ -10,9 +10,6 @@ ENV TSTVRB=$VAR4
 EXPOSE 8080/tcp
 WORKDIR /app/
 COPY requirements.txt requirements.txt
-#RUN DB_ADMIN_USERNAME=$DB_ADMIN_USERNAME
-#RUN DB_ADMIN_PASSWORD=$DB_ADMIN_PASSWORD
-#RUN DB_URL=$DB_URL
 RUN pip3 install -r requirements.txt
 COPY ./app /app/
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
