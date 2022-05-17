@@ -134,8 +134,8 @@ url_api = 'https://swapi.dev/api/'
 
 #engine = create_engine('mysql+mysqldb://' + str(os.environ.get('VAR1')) + ':' + str(os.environ.get('VAR2')) + '@' + str(os.environ.get('VAR3')))
 
-#url_engine = "mysql+mysqldb://" + str(os.environ.get('DB_ADMIN_USERNAME')) + ":" + str(os.environ.get('DB_ADMIN_PASSWORD')) + "@" + str(os.environ.get('DB_URL'))
-#engine = create_engine(url_engine)
+url_engine = "mysql+mysqldb://" + str(os.environ.get('DB_ADMIN_USERNAME')) + ":" + str(os.environ.get('DB_ADMIN_PASSWORD')) + "@" + str(os.environ.get('DB_URL'))
+engine = create_engine(url_engine)
 
 # engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
 # Connecting to the database "mydb"; the database itself should already exist, the app will not
@@ -177,9 +177,9 @@ class People(Base):
     homeworld = Column(String(150))
 
 
-#Base.metadata.create_all(engine)  # Creating table in the database
-#Session = sessionmaker(engine)  # Defining a special Session class
-#session = Session()  # Creating an object of Session class
+Base.metadata.create_all(engine)  # Creating table in the database
+Session = sessionmaker(engine)  # Defining a special Session class
+session = Session()  # Creating an object of Session class
 
 
 @app.route('/')
