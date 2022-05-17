@@ -17,11 +17,6 @@ env:
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   KUBE_NAMESPACE: flasktest
   ECR_REPOSITORY: test-repo
-  VAR1: ${{ secrets.DB_ADMIN_USERNAME }}
-  VAR2: ${{ secrets.DB_ADMIN_PASSWORD }}
-  VAR3: ${{ secrets.DB_URL }}
-  VAR4: "test"
-
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -76,10 +71,10 @@ jobs:
           push: true
           tags: ${{ env.RELEASE_IMAGE }}
           build-args: |
-            ${{ env.VAR1 }}
-            ${{ env.VAR2 }}
-            ${{ env.VAR3 }}
-            ${{ env.VAR4 }}
+            VAR1: ${{ secrets.DB_ADMIN_USERNAME }}
+            VAR2: ${{ secrets.DB_ADMIN_PASSWORD }}
+            VAR3: ${{ secrets.DB_URL }}
+            VAR4: "test"
 
       - name: Compose YAML for create namespace
         run: |
