@@ -65,14 +65,18 @@ jobs:
         uses: docker/build-push-action@v2
         env:
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+          VAR1: ${{ secrets.DB_ADMIN_USERNAME }}
+          VAR2: ${{ secrets.DB_ADMIN_PASSWORD }}
         with:
           context: ./
           file: ./Dockerfile
           push: true
           tags: ${{ env.RELEASE_IMAGE }}
           build-args: |
-            VAR1="${{ secrets.DB_ADMIN_USERNAME }}"
-            VAR2="${{ secrets.DB_ADMIN_PASSWORD }}"
+#            VAR1="${{ secrets.DB_ADMIN_USERNAME }}"
+            ${{ env.VAR1 }}
+#            VAR2="${{ secrets.DB_ADMIN_PASSWORD }}"
+            VAR2=${{ env.VAR2 }}
             VAR3=${{ secrets.DB_URL }}
             VAR4=test
 
