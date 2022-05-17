@@ -71,10 +71,10 @@ jobs:
           push: true
           tags: ${{ env.RELEASE_IMAGE }}
           build-args: |
-            VAR1: ${{ secrets.DB_ADMIN_USERNAME }}
-            VAR2: ${{ secrets.DB_ADMIN_PASSWORD }}
-            VAR3: ${{ secrets.DB_URL }}
-            VAR4: "test"
+            VAR1=${{ secrets.DB_ADMIN_USERNAME }}
+            VAR2=${{ secrets.DB_ADMIN_PASSWORD }}
+            VAR3=${{ secrets.DB_URL }}
+            VAR4="test"
 
       - name: Compose YAML for create namespace
         run: |
