@@ -77,8 +77,8 @@ jobs:
 #            VAR1="${{ secrets.DB_ADMIN_USERNAME }}"
 #            ${{ env.VAR1 }}
 #            VAR2="${{ secrets.DB_ADMIN_PASSWORD }}"
-            VAR2=${{ env.VAR2 }}
-            VAR3=${{ env.VAR3 }}
+#            VAR2=${{ env.VAR2 }}
+#            VAR3=${{ env.VAR3 }}
             VAR4=test
 
       - name: Compose YAML for create namespace
