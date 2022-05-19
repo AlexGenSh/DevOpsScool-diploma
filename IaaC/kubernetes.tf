@@ -8,13 +8,13 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "flasktest" {
   metadata {
-    name =flasktest
+    name = var.test_namespace
   }
 }
 
 resource "kubernetes_namespace" "flaskprod" {
   metadata {
-    name =flaskprod
+    name = var.prod_namespace
   }
 }
 
@@ -188,7 +188,7 @@ resource "kubernetes_service" "elbprod" {
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-access-log-enabled" = "true"
       "service.beta.kubernetes.io/aws-load-balancer-access-log-emit-interval" = "5"
-      "service.beta.kubernetes.io/aws-load-balancer-access-log-s3-bucket-name" = "tf-s3-bucket-for-logs"
+      "service.beta.kubernetes.io/aws-load-balancer-access-log-s3-bucket-name" = "s3-bucket-for-logs"
     }
 
   }
@@ -199,7 +199,7 @@ resource "kubernetes_service" "elbprod" {
     }
 
     port {
-      port        = 5000
+      port        = 80
       target_port = 5000
     }
 

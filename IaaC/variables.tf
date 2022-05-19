@@ -57,6 +57,7 @@ variable "prod_namespace" {
   description = "Kubernetes prod namespace"
 }
 
+
 variable "test_app" {
   default = "flaskapptest"
   description = "Kubernetes test app"
@@ -65,4 +66,9 @@ variable "test_app" {
 variable "prod_app" {
   default = "flaskappprod"
   description = "Kubernetes prod app"
+}
+
+variable "environment" {
+  default = "Prod"
+  description = "Kubernetes prod environments"
 }

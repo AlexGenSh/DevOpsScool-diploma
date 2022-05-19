@@ -30,3 +30,8 @@ output "aws_eks_node_group" {
   value = aws_eks_node_group.diploma-eks-node-group.remote_access
 }
 
+
+#output "elb_prod_dns" {
+#  description = "ff"
+#  value = kubernetes_service.elbprod.id
+#}
