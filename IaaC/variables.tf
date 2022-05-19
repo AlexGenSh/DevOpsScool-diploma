@@ -10,7 +10,7 @@ variable "aws_secret_key" {
 
 #AWS Region
 variable "aws_region" {
-  default     = "us-east-2"
+  default     = "eu-west-1"
   type        = string
   description = "AWS Region"
 }
@@ -45,4 +45,24 @@ variable "db_username_prod" {
 variable "db_password_prod" {
   type        = string
   description = "db_password_prod"
+}
+
+variable "test_namespace" {
+  default = "flasktest"
+  description = "Kubernetes test namespace"
+}
+
+variable "prod_namespace" {
+  default = "flaskprod"
+  description = "Kubernetes prod namespace"
+}
+
+variable "test_app" {
+  default = "flaskapptest"
+  description = "Kubernetes test app"
+}
+
+variable "prod_app" {
+  default = "flaskappprod"
+  description = "Kubernetes prod app"
 }

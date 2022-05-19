@@ -87,11 +87,8 @@ jobs:
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
         run: |
           printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskapptest\n  namespace: ${{ env.KUBE_NAMESPACE }}\n  labels:\n    app: flaskapptest\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskapptest\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskapptest\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DB_URL}}" > k8s.yaml
-#        run: |
-#          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskapptest\n  labels:\n    app: flaskapptest\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskapptest\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskapptest\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DB_URL}}" > k8s.yaml
 
-
-      - name: Check deployment status
+       - name: Check deployment status
         id: deploy_status
 #        uses: Consensys/kubernetes-action@master
         uses: kodermax/kubectl-aws-eks@master
@@ -117,6 +114,13 @@ jobs:
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
         with:                                                                                                         
           args: apply -f k8s.yaml
+
+#      - name: Create new load balancer
+#        if: contains( env.DEPLOY_STATUS, 'flaskapptest') != 'true'
+#        uses: kodermax/kubectl-aws-eks@master
+#        with:
+#          args: expose deployment flaskapptest -n flsktest --port=80 --target-port=5000 --type=LoadBalacer --name=loadbalancer
+
 
       - name: Update Kubernetes deployment
         if: contains( env.DEPLOY_STATUS, 'flaskapptest') == 'true'
