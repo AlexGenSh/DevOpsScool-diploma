@@ -1,9 +1,9 @@
-resource "aws_s3_bucket" "s3-bucket-for-logs" {
+resource "aws_s3_bucket" "devops-school-diploma-s3-bucket-for-logs" {
 
-  bucket = "s3-bucket-for-logs"
-  acl   = "public-read"   # or can be "private"
+  bucket = "devops-school-diploma-s3-bucket-for-logs"
+  #  acl   = "log-delivery-write"   # or can be "public-read"
   tags = {
-    Name        = "public-read"
+    Name        = "private"
     Environment = "Prod"
   }
   force_destroy = true

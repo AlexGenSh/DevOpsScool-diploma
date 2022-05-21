@@ -119,7 +119,7 @@ jobs:
 #        if: contains( env.DEPLOY_STATUS, 'flaskapptest') != 'true'
 #        uses: kodermax/kubectl-aws-eks@master
 #        with:
-#          args: expose deployment flaskapptest -n flsktest --port=80 --target-port=5000 --type=LoadBalacer --name=loadbalancer
+#          args: expose deployment flaskapptest -n flasktest --port=80 --target-port=5000 --type=LoadBalancer --name=loadbalancer
 
 
       - name: Update Kubernetes deployment

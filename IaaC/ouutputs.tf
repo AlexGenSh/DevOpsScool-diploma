@@ -3,9 +3,19 @@ output "region" {
   value       = var.aws_region
 }
 
-output "elb" {
-  description = "ELB FQDN"
+output "IGW" {
+  description = "IGW FQDN"
   value = aws_internet_gateway.igw.tags_all
+}
+
+output "Test_ELB" {
+  description = "Test-ELB FQDN"
+  value = kubernetes_service.elb-test.status[0].load_balancer[0]
+}
+
+output "Prod_ELB" {
+  description = "Prod-ELB FQDN"
+  value = kubernetes_service.elb-prod.status[0].load_balancer[0]
 }
 
 #output "elb_id" {

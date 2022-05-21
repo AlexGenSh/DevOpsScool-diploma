@@ -217,6 +217,7 @@ resource "aws_ecr_repository_policy" "demo-repo-policy" {
   }
 EOF
 }
+
 #-----------RDS------------------------------
 
 resource "aws_db_instance" "diploma-rds-dev" {
@@ -337,6 +338,7 @@ resource "aws_eks_cluster" "diploma-cluster" {
   depends_on = [aws_iam_role_policy_attachment.diploma-AmazonEKSClusterPolicy]
 }
 
+
 resource "aws_eks_node_group" "diploma-eks-node-group" {
   cluster_name    = aws_eks_cluster.diploma-cluster.name
   node_group_name = "diploma-eks-node-group"
@@ -370,4 +372,12 @@ resource "aws_eks_node_group" "diploma-eks-node-group" {
     aws_iam_role_policy_attachment.nodes-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.nodes-AmazonEC2ContainerRegistryReadOnly,
   ]
+}
+
+data "aws_eks_cluster" "diploma-cluster" {
+  name = aws_eks_cluster.diploma-cluster.id
+}
+
+data "aws_eks_cluster_auth" "diploma-cluster" {
+  name = aws_eks_cluster.diploma-cluster.id
 }

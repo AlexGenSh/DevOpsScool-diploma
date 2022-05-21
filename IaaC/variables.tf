@@ -72,3 +72,8 @@ variable "environment" {
   default = "Prod"
   description = "Kubernetes prod environments"
 }
+
+variable "image_init" {
+  default = "nginx:1.7.8"
+  description = "Initial image"
+}

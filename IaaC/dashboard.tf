@@ -1,11 +1,12 @@
-resource "time_sleep" "wait_600s" {
-  create_duration = "600s"
-  depends_on = [kubernetes_deployment.deployprod]
-}
+#resource "time_sleep" "wait_600s" {
+#  create_duration = "600s"
+#  depends_on = [kubernetes_deployment.proddeploy]
+#}
 
 resource aws_cloudwatch_dashboard my-dashboard {
-  dashboard_name = "tf-dashboard-1"
-  depends_on = [time_sleep.wait_600s]
+  dashboard_name = "Production"
+#  depends_on = [time_sleep.wait_600s]
+  depends_on = [aws_eks_node_group.diploma-eks-node-group]
   dashboard_body = <<JSON
 {
     "widgets": [
@@ -35,7 +36,7 @@ resource aws_cloudwatch_dashboard my-dashboard {
             "height": 3,
             "properties": {
                 "metrics": [
-                    [ "AWS/EC2", "StatusCheckFailed", "AutoScalingGroupName", "${aws_eks_node_group.diploma-eks-node-group.resources}"]
+                    [ "AWS/EC2", "StatusCheckFailed", "AutoScalingGroupName", "${aws_eks_node_group.diploma-eks-node-group.resources[0].autoscaling_groups[0].name}"]
                 ],
                 "view": "singleValue",
                 "region":"${var.aws_region}",
@@ -47,4 +48,5 @@ resource aws_cloudwatch_dashboard my-dashboard {
     ]
 }
 JSON
+# depends_on = [aws_eks_node_group.diploma-eks-node-group]
 }
