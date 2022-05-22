@@ -95,14 +95,27 @@ jobs:
 #        uses: Consensys/kubernetes-action@master
         uses: kodermax/kubectl-aws-eks@master
         with:
-#          args: get deploy -A
-          args: get all -A
+          args: get deploy -A
+#          args: get all -A
 
       - name: Print deployment status and ENV
         env:
           DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
         run: |
           echo  ${{ steps.deploy_status.outputs.result }}
+
+      - name: Check deployment status service
+        id: deploy_status_services
+        uses: kodermax/kubectl-aws-eks@master
+        with:
+          args: get service -A
+
+      - name: Print deployment status service
+        env:
+          DEPLOY_STATUS_SVC: ${{ steps.deploy_status_services.outputs.result }}
+        run: |
+          echo  ${{ steps.deploy_status_services.outputs.result }}
+
 
       - name: Create dev namespaces
         if: contains( env.DEPLOY_STATUS, 'flaskdev') != 'true'
@@ -119,7 +132,7 @@ jobs:
           args: apply -f k8s.yaml
 
       - name: Create new Dev load balancer
-        if: contains( env.DEPLOY_STATUS, 'elb-dev') != 'true'
+        if: contains( env.DEPLOY_STATUS_SVC, 'elb-dev') != 'true'
         uses: kodermax/kubectl-aws-eks@master
         with:
           args: expose deployment flaskappdev -n flaskdev --port=80 --target-port=5000 --type=LoadBalancer --name=elb-dev
