@@ -1,11 +1,11 @@
-name: Deploy_Dev_Env
+name: Deploy_Prod_Env
 # Create new deployment or update existing one
 # Includes SonarCloud scan
 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master ]
+#  push:
+#    branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -16,11 +16,11 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  KUBE_NAMESPACE: flaskdev
+  KUBE_NAMESPACE: flaskprod
   ECR_REPOSITORY: test-repo
   DB_ADMIN_USERNAME: ${{ secrets.DB_ADMIN_USERNAME }}
   DB_ADMIN_PASSWORD: ${{ secrets.DB_ADMIN_PASSWORD }}
-  DB_URL: ${{ secrets.DEV_DB_URL }}
+  DB_URL: ${{ secrets.DB_URL }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

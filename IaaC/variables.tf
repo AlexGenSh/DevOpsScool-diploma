@@ -48,7 +48,7 @@ variable "db_password_prod" {
 }
 
 variable "test_namespace" {
-  default = "flasktest"
+  default = "flaskdev"
   description = "Kubernetes test namespace"
 }
 
@@ -59,7 +59,7 @@ variable "prod_namespace" {
 
 
 variable "test_app" {
-  default = "flaskapptest"
+  default = "flaskappdev"
   description = "Kubernetes test app"
 }
 
