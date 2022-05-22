@@ -95,8 +95,9 @@ jobs:
 #        uses: Consensys/kubernetes-action@master
         uses: kodermax/kubectl-aws-eks@master
         with:
-          args: get deploy -A
-    
+#          args: get deploy -A
+          args: get all -A
+
       - name: Print deployment status and ENV
         env:
           DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
@@ -117,11 +118,11 @@ jobs:
         with:                                                                                                         
           args: apply -f k8s.yaml
 
-#      - name: Create new load balancer
-#        if: contains( env.DEPLOY_STATUS, 'flaskapptest') != 'true'
-#        uses: kodermax/kubectl-aws-eks@master
-#        with:
-#          args: expose deployment flaskapptest -n flasktest --port=80 --target-port=5000 --type=LoadBalancer --name=loadbalancer
+      - name: Create new Dev load balancer
+        if: contains( env.DEPLOY_STATUS, 'elb-test') != 'true'
+        uses: kodermax/kubectl-aws-eks@master
+        with:
+          args: expose deployment flaskapptest -n flasktest --port=80 --target-port=80 --type=LoadBalancer --name=elb-test
 
 
       - name: Update test Kubernetes deployment
