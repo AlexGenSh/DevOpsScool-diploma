@@ -8,9 +8,9 @@ metadata:
 #    service.beta.kubernetes.io/aws-load-balancer-access-log-emit-interval: "5"
 #    service.beta.kubernetes.io/aws-load-balancer-access-log-s3-bucket-name:  "devops-school-diploma-s3-bucket-for-logs"
 #    service.beta.kubernetes.io/aws-load-balancer-access-log-s3-bucket-prefix: "/dev"
-  annotations:
-    service.beta.kubernetes.io/access_logs.s3.enabled: "true"
-    service.beta.kubernetes.io/access_logs.s3.bucket:  "devops-school-diploma-s3-bucket-for-logs-test"
+#  annotations:
+#    service.beta.kubernetes.io/access_logs.s3.enabled: "true"
+#    service.beta.kubernetes.io/access_logs.s3.bucket:  "devops-school-diploma-s3-bucket-for-logs-test"
 #    service.beta.kubernetes.io/access_logs.s3.prefix: "/dev"
 spec:
   type: LoadBalancer
@@ -19,5 +19,5 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
+      targetPort: 5000
 

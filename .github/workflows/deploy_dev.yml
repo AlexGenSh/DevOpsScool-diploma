@@ -130,11 +130,11 @@ jobs:
         with:                                                                                                         
           args: apply -f k8s.yaml
 
-      - name: Create new Dev load balancer
-        if: contains( env.DEPLOY_STATUS_SVC, 'elb-dev') != 'true'
-        uses: kodermax/kubectl-aws-eks@master
-        with:
-          args: expose deployment flaskappdev -n flaskdev --port=80 --target-port=5000 --type=LoadBalancer --name=elb-dev
+#      - name: Create new Dev load balancer
+#        if: contains( env.DEPLOY_STATUS_SVC, 'elb-dev') != 'true'
+#        uses: kodermax/kubectl-aws-eks@master
+#        with:
+#          args: expose deployment flaskappdev -n flaskdev --port=80 --target-port=5000 --type=LoadBalancer --name=elb-dev
 
 
       - name: Update Dev Kubernetes deployment
