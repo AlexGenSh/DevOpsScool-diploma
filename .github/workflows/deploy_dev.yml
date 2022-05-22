@@ -17,7 +17,7 @@ env:
   MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   KUBE_NAMESPACE: flasktest
-  ECR_REPOSITORY: Project-repo
+  ECR_REPOSITORY: test-repo
   DB_ADMIN_USERNAME: ${{ secrets.DB_ADMIN_USERNAME }}
   DB_ADMIN_PASSWORD: ${{ secrets.DB_ADMIN_PASSWORD }}
   DB_URL: ${{ secrets.DEV_DB_URL }}
