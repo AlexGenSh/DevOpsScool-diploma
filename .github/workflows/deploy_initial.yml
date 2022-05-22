@@ -1,0 +1,128 @@
+name: Deploy_Initial
+# Create new deployment or update existing one
+# Includes SonarCloud scan
+
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+#  push:
+#    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  DEV_KUBE_NAMESPACE: flaskdev
+  PROD_KUBE_NAMESPACE: flaskprod
+  ECR_REPOSITORY: test-repo
+  DB_ADMIN_USERNAME: ${{ secrets.DB_ADMIN_USERNAME }}
+  DB_ADMIN_PASSWORD: ${{ secrets.DB_ADMIN_PASSWORD }}
+  PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
+  DEV_DB_URL: ${{ secrets.DEV_DB_URL }}
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build_and_deploy"
+  build_and_deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Cancel Previous Runs               
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:                                    
+          access_token: ${{ github.token }}
+
+      - name: Checkout                                  
+        uses: actions/checkout@v2
+     
+     - name: SonarCloud Scan
+       uses: SonarSource/sonarcloud-github-action@master
+       env:
+         GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Needed to get PR information, if any
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%d-%b-%H-%M-%S')"
+
+      - name: Configure AWS credentials                          
+        uses: aws-actions/configure-aws-credentials@v1           
+        with:                                                    
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}        
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+    
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        env:
+          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.RELEASE_IMAGE }}
+          build-args: |
+            VAR1=${{ env.DB_ADMIN_USERNAME }}
+            VAR2=${{ env.DB_ADMIN_PASSWORD }}
+            VAR3=${{ env.DB_URL }}
+
+      - name: Compose YAML for create DEV namespace
+        run: |
+          printf "apiVersion: v1\nkind: Namespace\nmetadata:\n name: ${{ env.DEV_KUBE_NAMESPACE }}" > k8nsdev.yaml
+
+      - name: Compose YAML for create PROD namespace
+        run: |
+          printf "apiVersion: v1\nkind: Namespace\nmetadata:\n name: ${{ env.PROD_KUBE_NAMESPACE }}" > k8nsprod.yaml
+
+      - name: Compose YAML for initial Kubernetes deployment DEV
+        env:
+          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+        run: |
+          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskappdev\n  namespace: ${{ env.DEV_KUBE_NAMESPACE }}\n  labels:\n    app: flaskappdev\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskappdev\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskappdev\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DEV_DB_URL}}" > k8sdev.yaml
+
+      - name: Compose YAML for initial Kubernetes deployment PROD
+        env:
+          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+        run: |
+          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskappprod\n  namespace: ${{ env.PROD_KUBE_NAMESPACE }}\n  labels:\n    app: flaskappprod\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskappprod\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskappprod\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.PROD_DB_URL}}" > k8sprod.yaml
+
+      - name: Create DEV namespaces
+        uses: kodermax/kubectl-aws-eks@master
+        with:
+          args: apply -f k8nsdev.yaml
+
+      - name: Create PROD namespaces
+        uses: kodermax/kubectl-aws-eks@master
+        with:
+          args: apply -f k8nsprod.yaml
+
+      - name: Create new Kubernetes deployment DEV
+        uses: kodermax/kubectl-aws-eks@master
+        env:                                                                                                          
+          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+        with:                                                                                                         
+          args: apply -f k8sdev.yaml
+
+      - name: Create new Kubernetes deployment PROD
+        uses: kodermax/kubectl-aws-eks@master
+        env:
+          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+        with:
+          args: apply -f k8sprod.yaml
+
+
