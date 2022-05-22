@@ -92,8 +92,8 @@ jobs:
 
       - name: Check deployment status
         id: deploy_status
-#        uses: Consensys/kubernetes-action@master
-        uses: kodermax/kubectl-aws-eks@master
+        uses: Consensys/kubernetes-action@master
+#        uses: kodermax/kubectl-aws-eks@master
         with:
           args: get deploy -A
 #          args: get all -A
@@ -115,7 +115,6 @@ jobs:
           DEPLOY_STATUS_SVC: ${{ steps.deploy_status_services.outputs.result }}
         run: |
           echo  ${{ steps.deploy_status_services.outputs.result }}
-
 
       - name: Create dev namespaces
         if: contains( env.DEPLOY_STATUS, 'flaskdev') != 'true'
