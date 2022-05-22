@@ -125,7 +125,7 @@ jobs:
           args: expose deployment flaskappdev -n flaskdev --port=80 --target-port=80 --type=LoadBalancer --name=elb-dev
 
 
-      - name: Update test Kubernetes deployment
+      - name: Update Dev Kubernetes deployment
         if: contains( env.DEPLOY_STATUS, 'flaskappdev') == 'true'
         uses: kodermax/kubectl-aws-eks@master                                                                         
         env:                                                                                                          
