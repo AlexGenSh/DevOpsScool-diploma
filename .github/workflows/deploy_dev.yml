@@ -114,7 +114,7 @@ jobs:
         env:
           DEPLOY_STATUS_SVC: ${{ steps.deploy_status_services.outputs.result }}
         run: |
-          echo  ${{ steps.deploy_status_services.outputs.result }}
+          echo  "${{ steps.deploy_status_services.outputs.result }}"
 
       - name: Create dev namespaces
         if: contains( env.DEPLOY_STATUS, 'flaskdev') != 'true'
