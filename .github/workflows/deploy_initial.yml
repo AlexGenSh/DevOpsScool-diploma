@@ -1,5 +1,5 @@
 name: Deploy_Initial
-# Create new deployment or update existing one
+# Create new deployments ELB, NAMESPACES, APPDEV, APPPROD
 # Includes SonarCloud scan
 
 on:
@@ -125,4 +125,12 @@ jobs:
         with:
           args: apply -f k8sprod.yaml
 
+      - name: Create new Dev load balancer
+        uses: kodermax/kubectl-aws-eks@master
+        with:
+          args: expose deployment flaskappdev -n flaskdev --port=80 --target-port=5000 --type=LoadBalancer --name=elb-dev
 
+      - name: Create new Prod load balancer
+        uses: kodermax/kubectl-aws-eks@master
+        with:
+          args: expose deployment flaskappprod -n flaskprod --port=80 --target-port=5000 --type=LoadBalancer --name=elb-prod

@@ -1,4 +1,4 @@
-IaaC/.terraform
+IaC/.terraform
 *.tfstate
 *.tfstate.backup
-IaaC/terraform.tfvars
+IaC/terraform.tfvars

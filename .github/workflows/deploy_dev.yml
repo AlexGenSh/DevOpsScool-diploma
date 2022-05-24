@@ -80,55 +80,53 @@ jobs:
             VAR2=${{ env.DB_ADMIN_PASSWORD }}
             VAR3=${{ env.DB_URL }}
 
-      - name: Compose YAML for create dev namespace
-        run: |
-          printf "apiVersion: v1\nkind: Namespace\nmetadata:\n name: ${{ env.KUBE_NAMESPACE }}" > k8ns.yaml
+#      - name: Compose YAML for create dev namespace
+#        run: |
+#          printf "apiVersion: v1\nkind: Namespace\nmetadata:\n name: ${{ env.KUBE_NAMESPACE }}" > k8ns.yaml
 
-      - name: Compose YAML for initial Kubernetes deployment
-        env:
-          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
-        run: |
-          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskappdev\n  namespace: ${{ env.KUBE_NAMESPACE }}\n  labels:\n    app: flaskapptest\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskappdev\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskappdev\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DB_URL}}" > k8s.yaml
+#      - name: Compose YAML for initial Kubernetes deployment
+#        env:
+#          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+#        run: |
+#          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskappdev\n  namespace: ${{ env.KUBE_NAMESPACE }}\n  labels:\n    app: flaskapptest\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: flaskappdev\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskappdev\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DB_URL}}" > k8s.yaml
 
-      - name: Check deployment status
-        id: deploy_status
-#        uses: Consensys/kubernetes-action@master
-        uses: kodermax/kubectl-aws-eks@master
-        with:
-          args: get deploy -A
-#          args: get all -A
+#      - name: Check deployment status
+#        id: deploy_status
+#        uses: kodermax/kubectl-aws-eks@master
+#        with:
+#         args: get deploy -A
 
-      - name: Print deployment status and ENV
-        env:
-          DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
-        run: |
-          echo  ${{ steps.deploy_status.outputs.result }}
+#      - name: Print deployment status and ENV
+#        env:
+#          DEPLOY_STATUS: ${{ steps.deploy_status.outputs.result }}
+#        run: |
+#          echo  ${{ steps.deploy_status.outputs.result }}
 
-      - name: Check deployment status service
-        id: deploy_status_services
-        uses: kodermax/kubectl-aws-eks@master
-        with:
-          args: get service -A
+#      - name: Check deployment status service
+#        id: deploy_status_services
+#        uses: kodermax/kubectl-aws-eks@master
+#        with:
+#          args: get service -A
 
-      - name: Print deployment status service
-        env:
-          DEPLOY_STATUS_SVC: ${{ steps.deploy_status_services.outputs.result }}
-        run: |
-          echo  "${{ steps.deploy_status_services.outputs.result }}"
+#      - name: Print deployment status service
+#        env:
+#          DEPLOY_STATUS_SVC: ${{ steps.deploy_status_services.outputs.result }}
+#        run: |
+#          echo  "${{ steps.deploy_status_services.outputs.result }}"
 
-      - name: Create dev namespaces
-        if: contains( env.DEPLOY_STATUS, 'flaskdev') != 'true'
-        uses: kodermax/kubectl-aws-eks@master
-        with:
-          args: apply -f k8ns.yaml
+#      - name: Create dev namespaces
+#        if: contains( env.DEPLOY_STATUS, 'flaskdev') != 'true'
+#        uses: kodermax/kubectl-aws-eks@master
+#        with:
+#          args: apply -f k8ns.yaml
       
-      - name: Create new Kubernetes deployment
-        if: contains( env.DEPLOY_STATUS, 'flaskappdev') == 'true'
-        uses: kodermax/kubectl-aws-eks@master                                                                         
-        env:                                                                                                          
-          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
-        with:                                                                                                         
-          args: apply -f k8s.yaml
+#      - name: Create new Kubernetes deployment
+#        if: contains( env.DEPLOY_STATUS, 'flaskappdev') == 'true'
+#        uses: kodermax/kubectl-aws-eks@master
+#        env:
+#          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+#        with:
+#          args: apply -f k8s.yaml
 
 #      - name: Create new Dev load balancer
 #        if: contains( env.DEPLOY_STATUS_SVC, 'elb-dev') != 'true'
