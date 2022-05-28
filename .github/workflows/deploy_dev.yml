@@ -135,7 +135,7 @@ jobs:
 
 
       - name: Update Dev Kubernetes deployment
-        if: contains( env.DEPLOY_STATUS, 'flaskappdev') != 'true'
+#        if: contains( env.DEPLOY_STATUS, 'flaskappdev') != 'true'
         uses: kodermax/kubectl-aws-eks@master                                                                         
         env:                                                                                                          
           RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}

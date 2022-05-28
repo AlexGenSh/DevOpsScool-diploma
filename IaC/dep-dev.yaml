@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskappdev
+  namespace: ${{ env.DEV_KUBE_NAMESPACE }}
+  labels:
+    app: flaskappdev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flaskappdev
+  template:
+    metadata:
+      name: flasktemplate1
+      labels:
+        app: flaskappdev
+    spec:
+      containers:
+      - image: ${{ env.RELEASE_IMAGE }}
+        name: flaskcontainer
+        resources:
+          requests:
+          memory: "50Mi"
+          cpu: "150m"
+          limits:
+          memory: "100Mi"
+          cpu: "500m"
+        env:
+        - name: DB_ADMIN_USERNAME
+          value: ${{ env.DB_ADMIN_USERNAME}}
+        - name: DB_ADMIN_PASSWORD
+          value: ${{ env.DB_ADMIN_PASSWORD}}
+        - name: DB_URL
+          value: ${{ env.DEV_DB_URL}}
