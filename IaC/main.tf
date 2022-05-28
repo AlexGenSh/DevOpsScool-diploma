@@ -21,7 +21,6 @@ provider "aws" {
     }
   }
 }
-#----------------IAM roles-------------
 
 #Cluster IAM role
 
@@ -87,7 +86,7 @@ resource "aws_iam_role_policy_attachment" "nodes-AmazonEC2ContainerRegistryReadO
 }
 
 
-# Autoscale Policy & Role
+# Autoscale Policy
 
 resource "aws_iam_policy" "autoscale-policy" {
   name        = "Diploma_autoscale_policy"
@@ -127,7 +126,7 @@ resource "aws_vpc" "diploma-vpc-main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "Diploma-EKS-VPC"
+    Name = "EKS-VPC"
   }
 }
 
@@ -135,7 +134,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.diploma-vpc-main.id
 
   tags = {
-    Name = "Diploma-EKS-IGW"
+    Name = "EKS-IGW"
   }
 }
 
