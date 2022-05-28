@@ -35,16 +35,15 @@ jobs:
         uses: styfle/cancel-workflow-action@0.4.1
         with:                                    
           access_token: ${{ github.token }}
-#          access_token: ${{ env.MY_GITHUB_TOKEN }}
 
       - name: Checkout                                  
         uses: actions/checkout@v2
      
-#     - name: SonarCloud Scan
-#       uses: SonarSource/sonarcloud-github-action@master
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Needed to get PR information, if any
-#         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
       - name: Get current date
         id: date
