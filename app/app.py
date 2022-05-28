@@ -128,18 +128,8 @@ def func_update_peoples_db(var_people):
 
 
 url_api = 'https://swapi.dev/api/'
-
-#engine = create_engine('mysql+mysqldb://root:vagrant@192.168.56.115/mydb')
-#engine = create_engine('mysql+mysqldb://' + os.environ.get('DB_ADMIN_USERNAME') + ':'+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL'))
-
-#engine = create_engine('mysql+mysqldb://' + str(os.environ.get('VAR1')) + ':' + str(os.environ.get('VAR2')) + '@' + str(os.environ.get('VAR3')))
-
 url_engine = "mysql+mysqldb://" + str(os.environ.get('DB_ADMIN_USERNAME')) + ":" + str(os.environ.get('DB_ADMIN_PASSWORD')) + "@" + str(os.environ.get('DB_URL'))
 engine = create_engine(url_engine)
-
-# engine = create_engine("postgresql://" + os.environ.get('DB_ADMIN_USERNAME') + ":"+os.environ.get('DB_ADMIN_PASSWORD')+"@"+os.environ.get('DB_URL_POSTGRES')+"")
-# Connecting to the database "mydb"; the database itself should already exist, the app will not
-# create database itself. But the app will create tables in the database if they do not exist.
 
 
 Base = declarative_base()
