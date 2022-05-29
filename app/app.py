@@ -126,7 +126,7 @@ def func_update_peoples_db(var_people):
         var_people = var_people + 1
     return None
 
-
+# Create engine = +/mydb
 url_api = 'https://swapi.dev/api/'
 url_engine = "mysql+mysqldb://" + str(os.environ.get('DB_ADMIN_USERNAME')) + ":" + str(os.environ.get('DB_ADMIN_PASSWORD')) + "@" + str(os.environ.get('DB_URL'))
 engine = create_engine(url_engine)
@@ -225,6 +225,13 @@ def data_update():
     engine.dispose()
     return redirect(request.referrer)
 
+#@app.route('/delete')
+#def data_delete():
+#    Base.metadata.drop_all(engine)
+#    Base.metadata.create_all(engine)
+#    session.close()
+#    engine.dispose()
+#    return redirect(request.referrer)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
