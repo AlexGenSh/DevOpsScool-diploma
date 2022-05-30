@@ -1,4 +1,4 @@
-name: Deploy_Initial
+name: Deploy_Initial_Dev
 # Create new deployments ELB, NAMESPACES, APPDEV, APPPROD
 # Includes SonarCloud scan
 
@@ -16,12 +16,12 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  DEV_KUBE_NAMESPACE: flaskdev
+#  DEV_KUBE_NAMESPACE: flaskdev
   PROD_KUBE_NAMESPACE: flaskprod
   ECR_REPOSITORY: test-repo
   DB_ADMIN_USERNAME: ${{ secrets.DB_ADMIN_USERNAME }}
   DB_ADMIN_PASSWORD: ${{ secrets.DB_ADMIN_PASSWORD }}
-  PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
+#  PROD_DB_URL: ${{ secrets.PROD_DB_URL }}
   DEV_DB_URL: ${{ secrets.DEV_DB_URL }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -79,15 +79,15 @@ jobs:
           build-args: |
             VAR1=${{ env.DB_ADMIN_USERNAME }}
             VAR2=${{ env.DB_ADMIN_PASSWORD }}
-            VAR3=${{ env.DB_URL }}
+            VAR3=${{ env.DEV_DB_URL }}
 
       - name: Compose YAML for create DEV namespace
         run: |
           printf "apiVersion: v1\nkind: Namespace\nmetadata:\n name: ${{ env.DEV_KUBE_NAMESPACE }}" > k8nsdev.yaml
 
-      - name: Compose YAML for create PROD namespace
-        run: |
-          printf "apiVersion: v1\nkind: Namespace\nmetadata:\n name: ${{ env.PROD_KUBE_NAMESPACE }}" > k8nsprod.yaml
+#      - name: Compose YAML for create PROD namespace
+#        run: |
+#          printf "apiVersion: v1\nkind: Namespace\nmetadata:\n name: ${{ env.PROD_KUBE_NAMESPACE }}" > k8nsprod.yaml
 
       - name: Compose YAML for initial Kubernetes deployment DEV
         env:
@@ -95,21 +95,21 @@ jobs:
         run: |
           printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskappdev\n  namespace: ${{ env.DEV_KUBE_NAMESPACE }}\n  labels:\n    app: flaskappdev\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: flaskappdev\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskappdev\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        resources:\n          requests:\n            memory: "50Mi"\n            cpu: "150m"\n          limits:\n            memory: "100Mi"\n            cpu: "500m"\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.DEV_DB_URL}}" > k8sdev.yaml
 
-      - name: Compose YAML for initial Kubernetes deployment PROD
-        env:
-          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
-        run: |
-          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskappprod\n  namespace: ${{ env.PROD_KUBE_NAMESPACE }}\n  labels:\n    app: flaskappprod\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: flaskappprod\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskappprod\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        resources:\n          requests:\n            memory: "50Mi"\n            cpu: "150m"\n          limits:\n            memory: "100Mi"\n            cpu: "500m"\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.PROD_DB_URL}}" > k8sprod.yaml
+#      - name: Compose YAML for initial Kubernetes deployment PROD
+#        env:
+#          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+#        run: |
+#          printf "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: flaskappprod\n  namespace: ${{ env.PROD_KUBE_NAMESPACE }}\n  labels:\n    app: flaskappprod\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: flaskappprod\n  template:\n    metadata:\n      name: flasktemplate1\n      labels:\n        app: flaskappprod\n    spec:\n      containers:\n      - image: ${{ env.RELEASE_IMAGE }}\n        name: flaskcontainer\n        resources:\n          requests:\n            memory: "50Mi"\n            cpu: "150m"\n          limits:\n            memory: "100Mi"\n            cpu: "500m"\n        env:\n        - name: DB_ADMIN_USERNAME\n          value: ${{ env.DB_ADMIN_USERNAME}}\n        - name: DB_ADMIN_PASSWORD\n          value: ${{ env.DB_ADMIN_PASSWORD}}\n        - name: DB_URL\n          value: ${{ env.PROD_DB_URL}}" > k8sprod.yaml
 
       - name: Create DEV namespaces
         uses: kodermax/kubectl-aws-eks@master
         with:
           args: apply -f k8nsdev.yaml
 
-      - name: Create PROD namespaces
-        uses: kodermax/kubectl-aws-eks@master
-        with:
-          args: apply -f k8nsprod.yaml
+#      - name: Create PROD namespaces
+#        uses: kodermax/kubectl-aws-eks@master
+#        with:
+#          args: apply -f k8nsprod.yaml
 
       - name: Create new Kubernetes deployment DEV
         uses: kodermax/kubectl-aws-eks@master
@@ -118,19 +118,19 @@ jobs:
         with:                                                                                                         
           args: apply -f k8sdev.yaml
 
-      - name: Create new Kubernetes deployment PROD
-        uses: kodermax/kubectl-aws-eks@master
-        env:
-          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
-        with:
-          args: apply -f k8sprod.yaml
+#      - name: Create new Kubernetes deployment PROD
+#        uses: kodermax/kubectl-aws-eks@master
+#        env:
+#          RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.date.outputs.date }}
+#        with:
+#          args: apply -f k8sprod.yaml
 
       - name: Create new Dev load balancer
         uses: kodermax/kubectl-aws-eks@master
         with:
           args: expose deployment flaskappdev -n flaskdev --port=80 --target-port=5000 --type=LoadBalancer --name=elb-dev
 
-      - name: Create new Prod load balancer
-        uses: kodermax/kubectl-aws-eks@master
-        with:
-          args: expose deployment flaskappprod -n flaskprod --port=80 --target-port=5000 --type=LoadBalancer --name=elb-prod
+#      - name: Create new Prod load balancer
+#        uses: kodermax/kubectl-aws-eks@master
+#        with:
+#          args: expose deployment flaskappprod -n flaskprod --port=80 --target-port=5000 --type=LoadBalancer --name=elb-prod
