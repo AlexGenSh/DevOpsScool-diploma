@@ -16,8 +16,8 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-#  DEV_KUBE_NAMESPACE: flaskdev
-  PROD_KUBE_NAMESPACE: flaskprod
+  DEV_KUBE_NAMESPACE: flaskdev
+#  PROD_KUBE_NAMESPACE: flaskprod
   ECR_REPOSITORY: test-repo
   DB_ADMIN_USERNAME: ${{ secrets.DB_ADMIN_USERNAME }}
   DB_ADMIN_PASSWORD: ${{ secrets.DB_ADMIN_PASSWORD }}
