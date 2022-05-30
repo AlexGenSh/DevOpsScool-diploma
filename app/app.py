@@ -225,13 +225,13 @@ def data_update():
     engine.dispose()
     return redirect(request.referrer)
 
-#@app.route('/delete')
-#def data_delete():
-#    Base.metadata.drop_all(engine)
-#    Base.metadata.create_all(engine)
-#    session.close()
-#    engine.dispose()
-#    return redirect(request.referrer)
+@app.route('/delete')
+def data_delete():
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+    session.close()
+    engine.dispose()
+    return redirect(request.referrer)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

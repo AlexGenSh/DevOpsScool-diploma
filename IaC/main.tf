@@ -85,10 +85,10 @@ resource "aws_iam_role_policy_attachment" "nodes-AmazonEC2ContainerRegistryReadO
   role       = aws_iam_role.diploma-nodes-iam.name
 }
 
-resource "aws_iam_role_policy_attachment" "nodes-CloudWatchAgentServerPolicy" {
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-  role       = aws_iam_role.diploma-nodes-iam.name
-}
+#resource "aws_iam_role_policy_attachment" "nodes-CloudWatchAgentServerPolicy" {
+#  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+#  role       = aws_iam_role.diploma-nodes-iam.name
+#}
 
 # Autoscale Policy
 
